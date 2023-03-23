@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     const map = L.map('map').setView([-34.9285, 138.6007], 13); // Set coordinates to Adelaide
 
 
@@ -32,6 +32,38 @@ document.addEventListener('DOMContentLoaded', () => {
   
    // console.table(data);
     setInterval(updateVehiclePositions, 10000); // Update every 10 seconds
+
+    try {
+      const userLocation = await getUserLocation();
+      const userMarkerIcon = L.icon({
+        iconUrl: 'person.jpg',
+        iconSize: [25, 41], // Set the size of the icon
+        iconAnchor: [12, 41], // Set the anchor point of the icon
+      });
+      L.marker([userLocation.latitude, userLocation.longitude], { icon: userMarkerIcon }).addTo(map);
+    } catch (error) {
+      console.error('Error getting user location:', error);
+    }
   });
+
+  function getUserLocation() {
+    return new Promise((resolve, reject) => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            resolve({
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude,
+            });
+          },
+          (error) => {
+            reject(error);
+          }
+        );
+      } else {
+        reject(new Error('Geolocation is not supported by this browser.'));
+      }
+    });
+  }
 
  
