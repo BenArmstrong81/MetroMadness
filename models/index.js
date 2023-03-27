@@ -1,13 +1,5 @@
 const User = require('./User');
-const Project = require('./Route');
+const ChatLog = require('./ChatLog');
 
-User.hasMany(route, {
-  foreignKey: 'user_id',
-  onDelete: 'CASCADE'
-});
+module.exports = { User, ChatLog };
 
-Route.belongsTo(User, {
-  foreignKey: 'user_id'
-});
-
-module.exports = { User, Route };

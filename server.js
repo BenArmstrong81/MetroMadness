@@ -6,19 +6,29 @@ const ChatLog = require('./models/ChatLog');
 const GtfsRealtimeBindings = require('gtfs-realtime-bindings');
 const https = require('https');
 const exphbs = require('express-handlebars');
+const session = require('express-session');
+const SequelizeStore = require('connect-session-sequelize')(session.Store);
+const sequelize = require('./config/connection');
+const withAuth = require('./utils/auth');
+const routes = require('./controllers');
 
 const hbs = exphbs.create({ });
 
 app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
 
-app.use(express.static('public'));
+const path = require('path');
+
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Serve the index.html file on the root path
 app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/public/index.html');
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
+app.get('/chatroom', withAuth, (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'chatroom.html'));
+});
 
 
 // Return the current list of chat rooms as JSON
