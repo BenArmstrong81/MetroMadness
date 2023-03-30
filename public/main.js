@@ -33,7 +33,6 @@ document.addEventListener('DOMContentLoaded', () => {
       })
       .catch((error) => console.error('Error fetching vehicle positions:', error));
   };
-
   setInterval(updateVehiclePositions, 10000); // Update every 10 seconds
 
   // Chat logic
