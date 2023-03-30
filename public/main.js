@@ -18,7 +18,6 @@ document.addEventListener('DOMContentLoaded', () => {
           function logger(){
             //Add to chat.handlebars: function to call Chat room via route_id:
             joinRoom(vehicle.routeId);
-          
           console.log(vehicle.routeId);
           }
           if (vehicleMarkers[vehicleId]) {
@@ -26,7 +25,8 @@ document.addEventListener('DOMContentLoaded', () => {
           } else {
             const marker = L.marker(position).on('click', function(event){
               logger();
-            }).addTo(map);
+              //------Tooltip added to map; to display each bus/train & tram so user can select desired route they wish to catch.
+            }).bindTooltip(vehicle.routeId).addTo(map);
             vehicleMarkers[vehicleId] = marker;
           }
         });
@@ -53,15 +53,6 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById("busRoute").innerText = routeId;
     chatForm.style.display = 'block';
   }
-
-  // usernameForm.addEventListener('submit', (e) => {
-  //   e.preventDefault();
-  //   if (usernameInput.value) {
-  //     socket.emit('set username', usernameInput.value);
-  //     roomForm.style.display = 'block';
-  //     usernameForm.style.display = 'none';
-  //   }
-  // });
 
   roomForm.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -148,12 +139,9 @@ function displayLocationonmap()
 {
   
 }
-
   // Call updateUserLocation initially to add the user marker
   updateUserLocation();
-
   // Update user location every 10 seconds
-  
   setInterval(updateUserLocation, 10000);
 
 // Automatically back to login page afte 5 minutes
@@ -161,7 +149,6 @@ function back_to_login() {
   if(typeof timeOutObj != "undefined") {
     clearTimeout(timeOutObj);
 }
-
 timeOutObj = setTimeout(function(){ 
     localStorage.clear();
     window.location = "/login";
